@@ -16,12 +16,12 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Issue__c.IsClosed__c</field>
+        <field>Issue__c.Subject__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Issue__c.Subject__c</field>
+        <field>Issue__c.WasClosed__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
@@ -35,4 +35,8 @@
         <object>Issue__c</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
+    <tabSettings>
+        <tab>Issue__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
 </PermissionSet>

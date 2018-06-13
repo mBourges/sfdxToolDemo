@@ -1,53 +1,41 @@
 version: 2
+
 jobs:
   build:
-    docker:
-      - image: circleci/node:8
+    machine: true
+    working_directory: ~/ci_app
+    environment:
+      - DX_CLI_URL: https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
     steps:
       - checkout
-      - restore_cache:
-          keys:
-              - sfdx-version-41-local
       - run:
-          name: Install Salesforce DX
+          name: Download CLI
           command: |
-              openssl aes-256-cbc -k $KEY -in assets/server.key.enc -out assets/server.key -d
-              export SFDX_AUTOUPDATE_DISABLE=true
-              export SFDX_USE_GENERIC_UNIX_KEYCHAIN=true
-              export SFDX_DOMAIN_RETRY=300
-              npm install sfdx-cli
-              node_modules/sfdx-cli/bin/run --version
-              node_modules/sfdx-cli/bin/run plugins --core
-      - save_cache:
-          key: sfdx-version-41-local
-          paths:
-              - node_modules
+            mkdir sfdx
+            wget -qO- $DX_CLI_URL | tar xJ -C sfdx --strip-components 1
       - run:
-          name: Create Scratch Org
+          name: Install CLI
           command: |
-              node_modules/sfdx-cli/bin/run force:auth:jwt:grant --clientid $CONSUMER_KEY --jwtkeyfile assets/server.key --username $HUB_USERNAME --setdefaultdevhubusername -a DevHub
-              node_modules/sfdx-cli/bin/run force:org:create -v DevHub -s -f config/project-scratch-def.json -a scratch
+            ./sfdx/install
+            sfdx
+            mkdir tmp
+            openssl aes-256-cbc -k $KEY -in assets/server.key.enc -out assets/server.key -d
       - run:
-          name: Remove Server Key
-          when: always
+          name: Setup Org
           command: |
-              rm assets/server.key
-      - run:
-          name: Push Source
-          command: |
-             node_modules/sfdx-cli/bin/run force:source:push -u scratch
+            echo 'Running tests'
+            sfdx force:auth:jwt:grant --clientid $CONSUMER_KEY --jwtkeyfile assets/server.key --username $HUB_USERNAME --setdefaultdevhubusername -a hub
+            sfdx force --help
+            sfdx force:org:create -s -f ~/ci_app/config/project-scratch-def.json -a scratch --wait 2
+            sfdx force:source:push -u scratch
       - run:
           name: Run Apex Tests
           command: |
-              mkdir ~/apex_tests
-              node_modules/sfdx-cli/bin/run force:apex:test:run -u scratch -c -r human -d ~/apex_tests
-      - run:
-          name: Clean Up
-          when: always
-          command: |
-              node_modules/sfdx-cli/bin/run force:org:delete -u scratch -p
-              rm ~/apex_tests/*.txt ~/apex_tests/test-result-7*.json
-      - store_artifacts:
-          path: ~/apex_tests
+            mkdir -p ~/junit
+            sfdx force:apex:test:run -c -d ~/junit -r junit --wait 5
       - store_test_results:
-          path: ~/apex_tests
+          path: ~/junit
+      - run:
+          name: Delete Useless Scratch Org
+          command: |
+            sfdx force:org:delete -u scratch -p

@@ -23,6 +23,6 @@ public with sharing class tool_IssueTriggerHandlerTest {
     actual = createIssue();
     Test.stopTest();
 
-    System.assertEquals(false, actual.IsClosed__c);
+    System.assertEquals(false, actual.WasClosed__c);
   }
 }

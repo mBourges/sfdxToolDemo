@@ -20,11 +20,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>IsClosed__c</field>
+                <field>ClosedDate__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>ClosedDate__c</field>
+                <field>WasClosed__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

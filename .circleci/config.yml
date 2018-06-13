@@ -25,7 +25,7 @@ jobs:
       - run:
           name: Create Scratch Org
           command: |
-              node_modules/sfdx-cli/bin/run force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key --username $USERNAME --setdefaultdevhubusername -a DevHub
+              node_modules/sfdx-cli/bin/run force:auth:jwt:grant --clientid $CONSUMER_KEY --jwtkeyfile assets/server.key --username $USERNAME --setdefaultdevhubusername -a DevHub
               node_modules/sfdx-cli/bin/run force:org:create -v DevHub -s -f config/project-scratch-def.json -a scratch
       - run:
           name: Remove Server Key

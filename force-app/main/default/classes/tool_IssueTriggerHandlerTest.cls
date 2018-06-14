@@ -16,7 +16,7 @@ public with sharing class tool_IssueTriggerHandlerTest {
     createIssue();
   }
 
-  static testMethod void constructor_Should() {
+  static testMethod void constructor_ShouldBeFalseOnCreation() {
     Issue__c actual = null;
 
     Test.startTest();
@@ -24,5 +24,15 @@ public with sharing class tool_IssueTriggerHandlerTest {
     Test.stopTest();
 
     System.assertEquals(false, actual.WasClosed__c);
+  }
+
+  static testMethod void constructor_ShouldFail() {
+    Issue__c issue = [Select Id, ClosedDate__c From Issue Limit 1];
+
+    Test.startTest();
+    issue.ClosedDate = Date.today();
+    Test.stopTest();
+
+    System.assertEquals(true, actual.WasClosed__c);
   }
 }

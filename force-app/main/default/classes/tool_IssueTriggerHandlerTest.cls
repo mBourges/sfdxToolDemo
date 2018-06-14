@@ -33,6 +33,6 @@ public with sharing class tool_IssueTriggerHandlerTest {
     issue.ClosedDate__c = Date.today();
     Test.stopTest();
 
-    System.assertEquals(true, actual.WasClosed__c);
+    System.assertEquals(true, issue.WasClosed__c);
   }
 }

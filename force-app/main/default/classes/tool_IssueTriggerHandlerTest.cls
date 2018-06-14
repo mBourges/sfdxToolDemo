@@ -31,6 +31,7 @@ public with sharing class tool_IssueTriggerHandlerTest {
 
     Test.startTest();
     issue.ClosedDate__c = Date.today();
+    insert issue;
     Test.stopTest();
 
     System.assertEquals(true, issue.WasClosed__c);

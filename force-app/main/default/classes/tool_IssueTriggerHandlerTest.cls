@@ -34,6 +34,8 @@ public with sharing class tool_IssueTriggerHandlerTest {
     update issue;
     Test.stopTest();
 
+    issue = [Select Id, WasClosed__c From Issue__c Limit 1];
+
     System.assertEquals(true, issue.WasClosed__c);
   }
 }

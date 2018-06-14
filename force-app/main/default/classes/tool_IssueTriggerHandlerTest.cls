@@ -30,7 +30,7 @@ public with sharing class tool_IssueTriggerHandlerTest {
     Issue__c issue = [Select Id, ClosedDate__c From Issue Limit 1];
 
     Test.startTest();
-    issue.ClosedDate = Date.today();
+    issue.ClosedDate__c = Date.today();
     Test.stopTest();
 
     System.assertEquals(true, actual.WasClosed__c);

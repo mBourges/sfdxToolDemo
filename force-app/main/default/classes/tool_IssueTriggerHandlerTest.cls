@@ -27,7 +27,7 @@ public with sharing class tool_IssueTriggerHandlerTest {
   }
 
   static testMethod void constructor_ShouldFail() {
-    Issue__c issue = [Select Id, ClosedDate__c From Issue Limit 1];
+    Issue__c issue = [Select Id, ClosedDate__c From Issue__c Limit 1];
 
     Test.startTest();
     issue.ClosedDate__c = Date.today();

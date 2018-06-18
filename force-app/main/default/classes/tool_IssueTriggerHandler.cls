@@ -8,8 +8,4 @@ public with sharing class tool_IssueTriggerHandler {
   static public Boolean hasClosedDate(Issue__c issue) {
     return issue.ClosedDate__c != null;
   }
-
-  static public Boolean isTrue() {
-    return true;
-  }
 }
